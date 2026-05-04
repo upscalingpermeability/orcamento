@@ -158,9 +158,9 @@ Retorne APENAS o JSON puro.`;
     messages: [{ role: 'user', content: prompt }],
   });
 
-  const fullText = response.content
+  const fullText = (response.content as Array<{ type: string; text?: string }>)
     .filter((b) => b.type === 'text')
-    .map((b) => (b as { type: 'text'; text: string }).text)
+    .map((b) => b.text ?? ')
     .join('');
 
   let clean = fullText.trim();
