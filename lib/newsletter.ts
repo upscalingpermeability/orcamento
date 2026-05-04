@@ -160,7 +160,7 @@ Retorne APENAS o JSON puro.`;
 
   const fullText = (response.content as Array<{ type: string; text?: string }>)
     .filter((b) => b.type === 'text')
-    .map((b) => b.text ?? ')
+    .map((b) => b.text ?? '')
     .join('');
 
   let clean = fullText.trim();
