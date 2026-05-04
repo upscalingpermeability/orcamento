@@ -150,10 +150,11 @@ Priorize: Agência Brasil, Valor Econômico, Folha de S.Paulo, Estadão,
 Poder360, GOV.BR, Câmara dos Deputados, Senado Federal, TCU, STN.
 Retorne APENAS o JSON puro.`;
 
-  const response = await client.messages.create({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const response = await (client.messages.create as any)({
     model: 'claude-sonnet-4-20250514',
     max_tokens: 2000,
-    tools: [{ type: 'web_search_20250305' as const, name: 'web_search' }],
+    tools: [{ type: 'web_search_20250305', name: 'web_search' }],
     messages: [{ role: 'user', content: prompt }],
   });
 
