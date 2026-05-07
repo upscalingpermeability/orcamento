@@ -130,7 +130,7 @@ Retorne JSON puro:
 5 a 8 manchetes. Se não souber a URL exata, use "https://www.google.com/search?q=LOA+2025+orcamento". Apenas JSON.`;  
   
 
-  const res = await fetch('https://openrouter.ai/api/v1/chat/completions'', {
+  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
