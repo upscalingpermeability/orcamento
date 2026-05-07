@@ -116,54 +116,43 @@ export interface NewsletterData {
 // ─────────────────────────────────────────────────────────
 
 export async function buscarManchetes(topics: string[]): Promise<NewsletterData> {
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
   const hoje = new Date().toLocaleDateString('pt-BR', {
     timeZone: 'America/Sao_Paulo',
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
+    day: '2-digit', month: '2-digit', year: 'numeric',
   });
-
-  const topicsStr = topics.join(', ');
 
   const prompt = `Você é um jornalista especializado em orçamento público federal brasileiro.
-Hoje é ${hoje}. Busque as principais manchetes e notícias de HOJE sobre: ${topicsStr}.
+Hoje é ${hoje}. Busque as principais manchetes de HOJE sobre: ${topics.join(', ')}.
 
-Retorne SOMENTE um JSON válido, sem texto extra, sem blocos de código markdown:
+Retorne SOMENTE um JSON válido, sem markdown:
 {
   "data": "${hoje}",
-  "sumario": "Parágrafo de 2-3 frases resumindo o cenário do dia em orçamento público.",
+  "sumario": "2-3 frases resumindo o cenário do dia.",
   "manchetes": [
-    {
-      "titulo":  "Título completo da manchete",
-      "veiculo": "Nome do veículo ou fonte",
-      "tema":    "LOA | LDO | PPA | PLOA | FISCAL",
-      "resumo":  "Análise breve de 1-2 frases sobre o impacto da notícia.",
-      "url":     "URL real da matéria"
-    }
+    { "titulo": "...", "veiculo": "...", "tema": "LOA|LDO|PPA|PLOA|FISCAL", "resumo": "...", "url": "..." }
   ]
 }
+Inclua 5 a 8 manchetes. Retorne APENAS o JSON puro.`;
 
-Inclua de 5 a 8 manchetes, ordenadas por relevância e impacto.
-Priorize: Agência Brasil, Valor Econômico, Folha de S.Paulo, Estadão,
-Poder360, GOV.BR, Câmara dos Deputados, Senado Federal, TCU, STN.
-Retorne APENAS o JSON puro.`;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const response = await (client.messages.create as any)({
-    model: 'claude-sonnet-4-20250514',
-    max_tokens: 2000,
-    tools: [{ type: 'web_search_20250305', name: 'web_search' }],
-    messages: [{ role: 'user', content: prompt }],
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${process.env.GROQ_API_KEY ?? ''}`,
+    },
+    body: JSON.stringify({
+      model: 'compound-beta',
+      messages: [{ role: 'user', content: prompt }],
+    }),
   });
 
-  const fullText = (response.content as Array<{ type: string; text?: string }>)
-    .filter((b) => b.type === 'text')
-    .map((b) => b.text ?? '')
-    .join('');
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Groq API error ${res.status}: ${err}`);
+  }
 
-  let clean = fullText.trim();
+  const data = await res.json() as { choices: Array<{ message: { content: string } }> };
+  let clean = data.choices[0].message.content.trim();
   if (clean.startsWith('```')) {
     const parts = clean.split('```');
     clean = parts[1] ?? clean;
