@@ -129,15 +129,6 @@ Retorne JSON puro:
 
 5 a 8 manchetes. Se não souber a URL exata, use "https://www.google.com/search?q=LOA+2025+orcamento". Apenas JSON.`;  
   
-Retorne SOMENTE um JSON válido, sem markdown:
-{
-  "data": "${hoje}",
-  "sumario": "2-3 frases resumindo o cenário do dia.",
-  "manchetes": [
-    { "titulo": "...", "veiculo": "...", "tema": "LOA|LDO|PPA|PLOA|FISCAL", "resumo": "...", "url": "..." }
-  ]
-}
-Inclua 5 a 8 manchetes. Retorne APENAS o JSON puro.`;
 
   const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
