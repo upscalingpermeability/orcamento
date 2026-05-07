@@ -130,11 +130,11 @@ Retorne JSON puro:
 5 a 8 manchetes. Se não souber a URL exata, use "https://www.google.com/search?q=LOA+2025+orcamento". Apenas JSON.`;  
   
 
-  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+  const res = await fetch('https://openrouter.ai/api/v1/chat/completions'', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.GROQ_API_KEY ?? ''}`,
+      'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY ?? ''}`,
     },
     body: JSON.stringify({
       model: 'compound-beta',

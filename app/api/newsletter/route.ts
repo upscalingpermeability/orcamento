@@ -11,7 +11,7 @@ import { enviarParaTodos, parseRecipients } from '@/lib/sendgrid';
 
 // Valida as variáveis obrigatórias
 function checkEnv(): string | null {
-  for (const v of ['GROQ_API_KEY', 'SENDGRID_API_KEY', 'FROM_EMAIL', 'RECIPIENTS']) {
+  for (const v of ['OPENROUTER_API_KEY', 'SENDGRID_API_KEY', 'FROM_EMAIL', 'RECIPIENTS']) {
     if (!process.env[v]) return v;
   }
   return null;
