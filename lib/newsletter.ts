@@ -120,14 +120,15 @@ export async function buscarManchetes(topics: string[]): Promise<NewsletterData>
     timeZone: 'America/Sao_Paulo',
     day: '2-digit', month: '2-digit', year: 'numeric',
   });
+   
+  const prompt = `Você é um jornalista de orçamento público federal brasileiro.
+Hoje é ${hoje}. Liste manchetes REAIS e RECENTES sobre: ${topics.join(', ')}.
+
+Retorne JSON puro:
+{"data":"${hoje}","sumario":"2-3 frases.","manchetes":[{"titulo":"...","veiculo":"...","tema":"LOA|LDO|PPA|PLOA|FISCAL","resumo":"...","url":"..."}]}
+
+5 a 8 manchetes. Se não souber a URL exata, use "https://www.google.com/search?q=LOA+2025+orcamento". Apenas JSON.`;  
   
-  const prompt = `Jornalista de orçamento público federal brasileiro. Hoje é ${hoje}. Busque manchetes de HOJE sobre: ${topics.join(', ')}.
-        
-      Retorne JSON puro: 
-      {"data":"${hoje}","sumario":"2-3 frases.","manchetes":[{"titulo":"...","veiculo":"...","tema":"LOA|LDO|PPA|PLOA|FISCAL","resumo":"...","url":"..."}]}
-
-      5 a 8 manchetes. Apenas JSON.`;
-
 Retorne SOMENTE um JSON válido, sem markdown:
 {
   "data": "${hoje}",
