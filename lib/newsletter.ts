@@ -137,7 +137,7 @@ Retorne JSON puro:
       'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY ?? ''}`,
     },
     body: JSON.stringify({
-      model: 'compound-beta',
+      model: 'perplexity/sonar',
       messages: [{ role: 'user', content: prompt }],
     }),
   });
